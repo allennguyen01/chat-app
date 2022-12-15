@@ -1,5 +1,16 @@
 {
 	"dependencies": {
-		"express": "^4.17.1"
+		"express": "^4.17.1",
+		"mongodb": "^4.11.0",
+		"ws": "^8.10.0"
+	},
+	"devDependencies": {
+		"nodemon": "^2.0.20"
+	},
+	"scripts": {
+		"start": "nodemon server.js",
+		"start-db": "brew services start mongodb-community@6.0",
+		"stop-db": "brew services stop mongodb-community@6.0",
+		"start-db-terminal": "mongosh"
 	}
 }
