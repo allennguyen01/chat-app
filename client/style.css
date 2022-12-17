@@ -1,0 +1,27 @@
+@media screen and (min-width: 1024px) {
+	#app-view {
+		width: 80%;
+	}
+}
+
+@media screen and (max-width: 1024px) and (min-width: 768px) {
+	#app-view {
+		width: 90%;
+	}
+}
+
+@media screen and (max-width: 768px) {
+	#app-view {
+		width: 100%;
+	}
+}
+
+div.message {
+	text-align: left;
+	background-color: lavender;
+}
+
+div.message.my-message {
+	text-align: right;
+	background-color: lightblue;
+}
