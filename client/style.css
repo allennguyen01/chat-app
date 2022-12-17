@@ -16,6 +16,10 @@
 	}
 }
 
+html {
+	font-size: 16px;
+}
+
 div.message {
 	text-align: left;
 	background-color: lavender;
@@ -24,4 +28,35 @@ div.message {
 div.message.my-message {
 	text-align: right;
 	background-color: lightblue;
+}
+
+#app-menu li {
+	background-color: purple;
+	list-style: none;
+}
+
+#app-menu a {
+	text-decoration: none;
+	color: white;
+}
+
+#app-menu li:hover {
+	background-color: rgb(216, 70, 216);
+	text-decoration: none;
+}
+
+#app-menu a:hover {
+	background-color: rgb(216, 70, 216);
+	text-decoration: none;
+	color: black;
+}
+
+.room-list * {
+	text-decoration: none;
+	color: black;
+	list-style: none;
+}
+
+.room-list li:hover {
+	background-color: rgb(216, 70, 216);
 }
