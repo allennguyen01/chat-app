@@ -45,6 +45,9 @@ class LobbyView {
         </div>
       </div>`
 		);
+		this.listElem = this.elem.querySelector("ul.room-list");
+		this.inputElem = this.elem.querySelector("div.page-control input");
+		this.buttonElem = this.elem.querySelector("div.page-control button");
 	}
 }
 
@@ -69,6 +72,10 @@ class ChatView {
           </div>
         </div>`
 		);
+		this.titleElem = this.elem.querySelector("h4.room-name");
+		this.chatElem = this.elem.querySelector("div.message-list");
+		this.inputElem = this.elem.querySelector("div.page-control textarea");
+		this.buttonElem = this.elem.querySelector("div.page-control button");
 	}
 }
 
