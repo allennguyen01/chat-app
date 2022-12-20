@@ -67,6 +67,9 @@ class Lobby {
 
 	addRoom(id, name, image = "assets/people.svg", messages = []) {
 		this.rooms[id] = new Room(id, name, image, messages);
+		if (this.onNewRoom) {
+			this.onNewRoom(this.rooms[id]);
+		}
 	}
 }
 
@@ -97,6 +100,10 @@ class LobbyView {
 			this.inputElem.value = "";
 		});
 
+		this.lobby.onNewRoom = (room) => {
+			this.addRoomToListElem(room);
+		};
+
 		this.redrawList();
 	}
 
@@ -104,9 +111,13 @@ class LobbyView {
 		emptyDOM(this.listElem);
 		for (const id in this.lobby.rooms) {
 			const room = this.lobby.rooms[id];
-			const roomDOM = createDOM(`<li><img src=${room.image}><a href="#/chat/${room.id}">${room.name}</a></li>`);
-			this.listElem.appendChild(roomDOM);
+			this.addRoomToListElem(room);
 		}
+	}
+
+	addRoomToListElem(room) {
+		const roomDOM = createDOM(`<li><img src=${room.image}><a href="#/chat/${room.id}">${room.name}</a></li>`);
+		this.listElem.appendChild(roomDOM);
 	}
 }
 
