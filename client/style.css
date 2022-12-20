@@ -57,11 +57,25 @@ ul {
 	align-items: center;
 	justify-content: space-between;
 	gap: 10px;
+	padding: 0 20px;
 }
 
 .room-list > li {
 	height: 30px;
 	width: 100%;
+	display: flex;
+	justify-content: center;
+	font-weight: 500;
+}
+
+.room-list img {
+	width: 30px;
+}
+
+.room-list li {
+	display: flex;
+	align-items: center;
+	gap: 10px;
 }
 
 .page-control button {

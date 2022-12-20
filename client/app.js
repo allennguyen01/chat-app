@@ -1,8 +1,9 @@
-cpen322.setDefault("image", "assets/everyone-icon.png");
+cpen322.setDefault("image", "assets/people.svg");
 cpen322.setDefault("testRoomId", "room-1");
 
 function main() {
-	const lobbyView = new LobbyView();
+	const lobby = new Lobby();
+	const lobbyView = new LobbyView(lobby);
 	const chatView = new ChatView();
 	const profileView = new ProfileView();
 
@@ -28,13 +29,13 @@ function main() {
 	renderRoute();
 	window.addEventListener("popstate", renderRoute);
 
-	cpen322.export(arguments.callee, { renderRoute, lobbyView, chatView, profileView });
+	cpen322.export(arguments.callee, { renderRoute, lobbyView, chatView, profileView, lobby });
 }
 
 window.addEventListener("load", main);
 
 class Room {
-	constructor(id, name, image = "assets/everyone-icon.png", messages = []) {
+	constructor(id, name, image = "assets/people.svg", messages = []) {
 		this.id = id;
 		this.name = name;
 		this.image = image;
@@ -51,10 +52,10 @@ class Room {
 class Lobby {
 	constructor() {
 		this.rooms = {
-			"room-1": new Room("room-1", "One"),
-			"room-2": new Room("room-2", "Two"),
-			"room-3": new Room("room-3", "Three"),
-			"room-4": new Room("room-4", "Four"),
+			"room-1": new Room("room-1", "Room 1"),
+			"room-2": new Room("room-2", "Room 2"),
+			"room-3": new Room("room-3", "Room 3"),
+			"room-4": new Room("room-4", "Room 4"),
 		};
 	}
 
@@ -64,13 +65,14 @@ class Lobby {
 		}
 	}
 
-	addRoom(id, name, image, messages) {
+	addRoom(id, name, image = "assets/people.svg", messages = []) {
 		this.rooms[id] = new Room(id, name, image, messages);
 	}
 }
 
 class LobbyView {
-	constructor() {
+	constructor(lobby) {
+		this.lobby = lobby;
 		this.elem = createDOM(
 			`<div class="content">
         <ul class="room-list">
@@ -87,6 +89,24 @@ class LobbyView {
 		this.listElem = this.elem.querySelector("ul.room-list");
 		this.inputElem = this.elem.querySelector("div.page-control input");
 		this.buttonElem = this.elem.querySelector("div.page-control button");
+
+		this.buttonElem.addEventListener("click", () => {
+			const id = `room-${Object.keys(this.lobby).length + 1}`;
+			const name = this.inputElem.value;
+			this.lobby.addRoom(id, name);
+			this.inputElem.value = "";
+		});
+
+		this.redrawList();
+	}
+
+	redrawList() {
+		emptyDOM(this.listElem);
+		for (const id in this.lobby.rooms) {
+			const room = this.lobby.rooms[id];
+			const roomDOM = createDOM(`<li><img src=${room.image}><a href="#/chat/${room.id}">${room.name}</a></li>`);
+			this.listElem.appendChild(roomDOM);
+		}
 	}
 }
 
