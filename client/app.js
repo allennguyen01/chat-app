@@ -1,6 +1,8 @@
 cpen322.setDefault("image", "assets/people.svg");
 cpen322.setDefault("testRoomId", "room-1");
 
+const profile = { username: "Allen" };
+
 function main() {
 	const lobby = new Lobby();
 	const lobbyView = new LobbyView(lobby);
@@ -23,6 +25,9 @@ function main() {
 			case url.startsWith("#/chat"):
 				emptyDOM(pageView);
 				pageView.appendChild(chatView.elem);
+				const roomId = url.split("/").pop();
+				const currentRoom = lobby.getRoom(roomId);
+				if (currentRoom) chatView.setRoom(currentRoom);
 		}
 	}
 
@@ -46,6 +51,9 @@ class Room {
 		if (text.trim() == "") return;
 		const message = { username: username, text: text };
 		this.messages.push(message);
+		if (this.onNewMessage) {
+			this.onNewMessage(message);
+		}
 	}
 }
 
@@ -123,6 +131,7 @@ class LobbyView {
 
 class ChatView {
 	constructor() {
+		this.room = null;
 		this.elem = createDOM(
 			`<div class="content">
           <h4 class="room-name">Italy</h4>
@@ -146,6 +155,57 @@ class ChatView {
 		this.chatElem = this.elem.querySelector("div.message-list");
 		this.inputElem = this.elem.querySelector("div.page-control textarea");
 		this.buttonElem = this.elem.querySelector("div.page-control button");
+		let self = this;
+
+		this.buttonElem.addEventListener("click", () => {
+			this.sendMessage();
+		});
+		this.inputElem.addEventListener("keyup", (event) => {
+			if (!event.shiftKey && event.key === "Enter") {
+				this.sendMessage();
+			}
+		});
+	}
+
+	sendMessage() {
+		const message = this.inputElem.value;
+		this.room.addMessage(profile.username, message);
+		this.inputElem.value = "";
+	}
+
+	setRoom(room) {
+		this.room = room;
+		this.titleElem.textContent = room.name;
+		emptyDOM(this.chatElem);
+
+		this.room.onNewMessage = (message) => {
+			this.addMessageToChatElem(message);
+		};
+
+		this.room.messages.forEach((message) => {
+			this.room.onNewMessage(message);
+		});
+	}
+
+	addMessageToChatElem(message) {
+		let currentMessage = ``;
+		if (message.username === profile.username) {
+			currentMessage = createDOM(
+				`<div class="message my-message">
+					<span class="message-user">${message.username}</span>
+					<span class="message-text">${message.text}</span>
+				</div>`
+			);
+		} else {
+			currentMessage = createDOM(
+				`<div class="message">
+					<span class="message-user">${message.username}</span>
+					<span class="message-text">${message.text}</span>
+				</div>`
+			);
+		}
+
+		this.chatElem.appendChild(currentMessage);
 	}
 }
 
